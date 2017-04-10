@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -44,7 +45,6 @@ public class AccountUtils {
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/webdav";
     private static final String ODAV_PATH = "/remote.php/odav";
     private static final String SAML_SSO_PATH = "/remote.php/webdav";
-    public static final String STATUS_PATH = "/status.php";
 
     public static final int ACCOUNT_VERSION = 1;
 
@@ -311,15 +311,16 @@ public class AccountUtils {
      * @return              Version of the OC server corresponding to account, according to the data saved
      *                      in the system AccountManager
      */
+    @Nullable
     public static OwnCloudVersion getServerVersion(Account account) {
         OwnCloudVersion serverVersion = null;
         if (account != null) {
             // capabilities are now the preferred source for version info
-            FileDataStorageManager fds = new FileDataStorageManager(
+            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
                 account,
                 MainApp.getAppContext().getContentResolver()
             );
-            OCCapability capability = fds.getCapability(account.name);
+            OCCapability capability = fileDataStorageManager.getCapability(account.name);
             if (capability != null) {
                 serverVersion = new OwnCloudVersion(capability.getVersionString());
 

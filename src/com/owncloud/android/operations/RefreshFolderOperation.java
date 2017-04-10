@@ -122,9 +122,9 @@ public class RefreshFolderOperation extends SyncOperation {
 
         // only in root folder: sync server version and user profile
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath())) {
-            OwnCloudVersion serverVersion = updateCapabilities();
+            OwnCloudVersion serverVersion = syncCapabilitiesAndGetServerVersion();
             mIsShareSupported = serverVersion.isSharedSupported();
-            updateUserProfile();
+            syncUserProfile();
         }
 
         // sync list of files, and contents of available offline files & folders
@@ -156,7 +156,7 @@ public class RefreshFolderOperation extends SyncOperation {
         
     }
 
-    private void updateUserProfile() {
+    private void syncUserProfile() {
         GetUserProfileOperation update = new GetUserProfileOperation();
         RemoteOperationResult result = update.execute(getStorageManager(), mContext);
         if (!result.isSuccess()) {
@@ -166,7 +166,7 @@ public class RefreshFolderOperation extends SyncOperation {
         }
     }
 
-    private OwnCloudVersion updateCapabilities() {
+    private OwnCloudVersion syncCapabilitiesAndGetServerVersion() {
         OwnCloudVersion serverVersion = null;
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
         RemoteOperationResult result = getCapabilities.execute(getStorageManager(), mContext);
