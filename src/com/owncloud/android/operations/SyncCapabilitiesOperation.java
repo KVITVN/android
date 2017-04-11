@@ -61,7 +61,7 @@ public class SyncCapabilitiesOperation extends SyncOperation {
             GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(MainApp.getAppContext());
             RemoteOperationResult statusResult = getStatus.execute(client);
             if (statusResult.isSuccess()) {
-                serverVersion = (OwnCloudVersion) (result.getData().get(0));
+                serverVersion = (OwnCloudVersion) (statusResult.getData().get(0));
             }
         }
 
